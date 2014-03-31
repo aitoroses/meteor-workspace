@@ -19,6 +19,9 @@ Template.workspaceTopbar.helpers
 # Template WorkspaceMain     #
 ##############################
 
+Template.workspaceMain.taskCount = ->
+  return Collections.Task.find().count()
+
 Template.workspaceMain.tasks = ->
   tasks = Collections.Task.find().fetch()
   taskObjects = []
