@@ -15,11 +15,10 @@ Template.LoginView.events({
 		NProgress.start()
 
 		# Call meteor authenticate method
-		Meteor.call "authenticateUser",[login, password], (err, res) ->
+		Meteor.call "authenticateUser", login, password, (err, res) ->
 			SessionAmplify.set('workflowContext', res.data)
-
 			# Retrieve the requests
-			Meteor.call 'getTasks', [res.data], (err, tasks) ->
+			Meteor.call 'getTasks', res.data, (err, tasks) ->
 				Task = Collections.Task
 
 				# Clean old

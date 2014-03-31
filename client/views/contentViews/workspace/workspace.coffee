@@ -30,3 +30,25 @@ Template.workspaceMain.tasks = ->
     }
 
   return taskObjects
+
+Template.workspaceMain.events
+  
+    "click .worklist tbody > tr:first-child": (e, tmpl)->
+      Meteor.call "getTaskDetailsById", SessionAmplify.get("workflowContext"), "c6daab1e-9a49-46fe-b4fd-27617d8cd2f1", (err, res) -> 
+
+        payload = res.data.children[1]
+        vars = payload.children[0]
+        obj = {
+          requestId: payload.children[1].val
+          currentStepId: payload.children[2].val
+          businessVars: [
+            vars.children[0].val
+            vars.children[1].val
+            vars.children[2].val
+            vars.children[3].val
+            vars.children[4].val
+          ]
+          "notificationReview": payload.children[3].val
+        }
+        console.log obj
+
