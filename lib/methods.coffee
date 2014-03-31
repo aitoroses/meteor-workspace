@@ -28,5 +28,12 @@ if Meteor.isServer
       console.log "------------------------------ Call end ------------------------------\n"
       return HTTP.get "http://localhost:3100/humantask/#{taskId}"
 
+    getForm: (requestId) ->
+      console.log "\n-------------------- Call on getForm ---------------------"
+      console.log "Calling getForm."
+      console.log "requestId:  #{requestId}"
+      console.log "------------------------------ Call end ------------------------------\n"
+      return HTTP.get "http://localhost:3100/form/#{requestId}"
+
 
   
