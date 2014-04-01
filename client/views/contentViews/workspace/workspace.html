@@ -70,7 +70,7 @@
                 </div>
             </div>
             <div class="worklist">
-                <table class="pure-table">
+                <table class="pure-table tasklist">
                     <thead>
                         <tr>
                             <th style="width: 50%">TaskId</th>
@@ -87,8 +87,67 @@
                             </tr>
                         {{/each}}
                     </tbody>
-                </table>         
+                </table>
+                <div class="humantaskForm">
+                    {{> formView}}
+                </div>
             </div>
         </section>
+    </div>
+</template>
+
+<template name="formView">
+    {{#if $exists title}}
+        <div class="formViewWrapper">
+            <header>
+                <h3>{{title}}</h3>
+                <button class="pure-button button-xsmall">Approve</button>
+                <button class="pure-button button-xsmall">Minor change</button>
+                <button class="pure-button button-xsmall">Formal change</button>
+                <button class="pure-button button-xsmall">Substantial change</button>
+            </header>
+            <form class="pure-form pure-form-stacked">
+                {{#with categories}}
+                    {{#each this}}
+                        {{> category}}
+                    {{/each}}
+                {{/with}}
+            </form> 
+        </div>
+    {{/if}}
+</template>
+
+<template name="category">
+    <fieldset>
+        <legend>{{name}}</legend>
+        <div class="pure-g">
+            {{#with fields}}
+                {{#each this}}
+                    {{> field}}
+                {{/each}}
+            {{/with}}
+        </div>
+    </fieldset>
+</template>
+
+<template name="field">
+    <div class="pure-u-1-2">
+        <label for="{{label}}">{{label}}</label>
+        {{#if $in fieldType "text" "datetime"}}
+            <input type="text" value={{value}}>
+        {{/if}}
+        {{#if $eq fieldType "multiline"}}
+            <textarea>{{value}}</textarea>
+        {{/if}}
+        {{#if $eq fieldType "checkbox"}}
+            <input type="text" value={{value}}>
+        {{/if}}
+        {{#if $eq fieldType "lov"}}
+            <select type="text" value={{value}}>
+                {{#each validValues}}
+                    <option value={{value}}>{{id}}</option>
+                {{/each}}
+            </select>
+        {{/if}}
     </div>
 </template>
