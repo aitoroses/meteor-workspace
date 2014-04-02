@@ -43,3 +43,5 @@ Template.LoginView.events({
 # Placeholder polyfill
 Template.LoginView.rendered = ->
 	$("input").placeholder()
+
+	

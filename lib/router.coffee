@@ -15,9 +15,14 @@ if Meteor.isClient
     LoginController = FastRender.RouteController.extend
         template: "LoginView"
 
+
     # Login Controller
     WorkspaceController = FastRender.RouteController.extend
         template: "WorkspaceView"
+        onBeforeAction: ->
+            context = SessionAmplify.get("workflowContext")
+            if not context?
+                Router.go("login")
 
 
     ########################################

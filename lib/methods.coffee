@@ -8,7 +8,7 @@ if Meteor.isServer
     authenticateUser: (login, password) ->
       console.log "\n----------------- Call on authenticateUser ----------------"
       console.log 'Calling authenticate user with: ' + [login, password]
-      url = "http://localhost:3100/authenticate?login=#{login}&#{password}"
+      url = "http://localhost:3100/authenticate?login=#{login}&password=#{password}"
       console.log url
       console.log "------------------------ Call end -------------------------\n"
       return HTTP.get url
@@ -17,16 +17,18 @@ if Meteor.isServer
     getTasks: (workflowContext) ->
       console.log "\n-------------------- Call on getTasks ---------------------"
       console.log "Calling getTasks for user #{workflowContext.login}."
+      console.log "Token:  #{workflowContext.token}"
       console.log "------------------------ Call end -------------------------\n"
-      return HTTP.get "http://localhost:3100/humantask"
+      return HTTP.post "http://localhost:3100/humantask", {data: workflowContext}
 
 
     getTaskDetailsById: (workflowContext, taskId) ->
       console.log "\n-------------------- Call on getTasksDetailsById ---------------------"
       console.log "Calling getTasks for user #{workflowContext.login}."
       console.log "TaskId:  #{taskId}"
+      console.log "Token:  #{workflowContext.token}"
       console.log "------------------------------ Call end ------------------------------\n"
-      return HTTP.get "http://localhost:3100/humantask/#{taskId}"
+      return HTTP.post "http://localhost:3100/humantask/#{taskId}", {data: workflowContext}
 
     getForm: (requestId) ->
       console.log "\n-------------------------- Call on getForm ---------------------------"
