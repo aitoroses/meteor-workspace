@@ -67,14 +67,15 @@ Template.workspaceMain.events
       # Save the context because it will get loose (Maybe we'll not need this)
       Session.set('selectedRowContext', this)
 
+      # Session formData gets cleaned, so UI gets cleaned
+      Session.set("formData", null) 
+
       Meteor.call "getTaskDetailsById", SessionAmplify.get("workflowContext"), this.taskId, (err, res) ->
         
-        # Session formData gets cleaned, so UI gets cleaned
-        Session.set("formData", null) 
         find = App.findNode
         xml = res.data
         payload = find("payload", xml)
-        vars = find("VariablesBusinessObject", payload)
+        vars = find("VariablesBusinessObject", payload) || {children: "12345"}
         obj = {
           requestId: find("requestId", payload).val
           currentStepId: find("currentStepId", payload).val
