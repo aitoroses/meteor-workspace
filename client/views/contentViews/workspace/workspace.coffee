@@ -26,7 +26,7 @@ Template.WorkspaceView.events
 Template.workspaceTopbar.helpers
   loggedUser: ->
     context = SessionAmplify.get('workflowContext') || {}
-    return context.login
+    return context.credential.login
 
 ##############################
 # Template WorkspaceMain     #
@@ -37,23 +37,9 @@ Template.workspaceMain.taskCount = ->
 
 Template.workspaceMain.tasks = ->
   filter = Session.get("searchFilter") || ""
-  tasks = Collections.Task.find().fetch()
-  taskObjects = []
-  for task in tasks
-    xml = task.task
-    findNode = App.findNode
-    
-    if findNode("title", xml).val.match(filter)
-      taskObjects.push {
-        _id: task._id
-        title: findNode("title", xml).val
-        assignedDate: findNode("assignedDate", xml).val
-        taskNumber: parseInt(findNode("taskNumber", xml).val)
-        taskDefinitionId: findNode("taskDefinitionId", xml).val
-        taskId: findNode("taskId", xml).val
-        creator: findNode("creator", xml).val
-      }
-  return taskObjects
+  tasks = Collections.Task.find()
+  return tasks
+  
 
 Template.workspaceMain.events
     "submit .worklistToolbar form": (e) ->

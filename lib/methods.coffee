@@ -3,12 +3,15 @@
 
 if Meteor.isServer
 
+  # Server
+  server = "http://localhost:9000"
+
   Meteor.methods
 
     authenticateUser: (login, password) ->
       console.log "\n----------------- Call on authenticateUser ----------------"
       console.log 'Calling authenticate user with: ' + [login, password]
-      url = "http://localhost:3100/authenticate?login=#{login}&password=#{password}"
+      url = "#{server}/TaskQueryService/AuthenticateOperation?login=#{login}&password=#{password}"
       console.log url
       console.log "------------------------ Call end -------------------------\n"
       return HTTP.get url
@@ -16,19 +19,19 @@ if Meteor.isServer
 
     getTasks: (workflowContext) ->
       console.log "\n-------------------- Call on getTasks ---------------------"
-      console.log "Calling getTasks for user #{workflowContext.login}."
+      console.log "Calling getTasks for user #{workflowContext.credential.login}."
       console.log "Token:  #{workflowContext.token}"
       console.log "------------------------ Call end -------------------------\n"
-      return HTTP.post "http://localhost:3100/humantask", {data: workflowContext}
+      return HTTP.post "#{server}/TaskQueryService/GetTasksOperation", {data: {token: workflowContext.token}}
 
 
     getTaskDetailsById: (workflowContext, taskId) ->
       console.log "\n-------------------- Call on getTasksDetailsById ---------------------"
-      console.log "Calling getTasks for user #{workflowContext.login}."
+      console.log "Calling getTasks for user #{workflowContext.credential.login}."
       console.log "TaskId:  #{taskId}"
       console.log "Token:  #{workflowContext.token}"
       console.log "------------------------------ Call end ------------------------------\n"
-      return HTTP.post "http://localhost:3100/humantask/#{taskId}", {data: workflowContext}
+      return HTTP.get "#{server}/TaskQueryService/GetTaskDetailsByIdOperation", {data: {token: workflowContext.token}}
 
     getForm: (requestId) ->
       console.log "\n-------------------------- Call on getForm ---------------------------"

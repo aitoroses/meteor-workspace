@@ -16,23 +16,40 @@ Template.LoginView.events({
 
 		# Call meteor authenticate method
 		Meteor.call "authenticateUser", login, password, (err, res) ->
-			SessionAmplify.set('workflowContext', res.data)
+			workflowContext = if res.data? then res.data.workflowContext
+			if workflowContext? 
+				SessionAmplify.set('workflowContext', workflowContext)
+			else throw Error("Login error")
+			
 			# Retrieve the requests
-			Meteor.call 'getTasks', res.data, (err, tasks) ->
-				Task = Collections.Task
+			Meteor.call 'getTasks', workflowContext, (err, res) ->
+				taskListResponse = res.data.taskListResponse
 
-				# Clean old
-				existingTasks = Task.find().fetch()
-				for task in existingTasks
-					Task.remove({_id: task._id})
+				if typeof taskListResponse is "object"
 
-				# Fetch new
-				for task in tasks.data
-					taskObject = {
-						userId: res.data.login
-						task: task
-					}
-					Task.insert(taskObject)
+					Task = Collections.Task
+
+					# Clean old
+					existingTasks = Task.find().fetch()
+					for task in existingTasks
+						Task.remove({_id: task._id})
+
+					# Fetch new
+					for taskNode in taskListResponse
+						processedTaskNode = ->
+							task = {}
+							for part in taskNode.task
+								_.extend(task, part)
+							return task
+
+						taskObject = {
+							userId: workflowContext.credential.login
+							task: processedTaskNode()
+						}
+
+						Task.insert(taskObject)
+
+				else throw Error("No task was found")
 
 			# Go to the workspace
 			Router.go("workspace")

@@ -75,17 +75,15 @@
                         <tr>
                             <th style="width: 50%">TaskId</th>
                             <th>Creator</th>
-                            <th>Number</th>
                             <th>Assigned</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each tasks}}
                             <tr>
-                                <td>{{title}}</td>
-                                <td>{{creator}}</td>
-                                <td>{{taskNumber}}</td>
-                                <td>{{assignedDate}}</td>
+                                <td>{{task.title}}</td>
+                                <td>{{task.creator}}</td>
+                                <td>{{task.systemAttributes.[0].assignedDate}}</td>
                             </tr>
                         {{/each}}
                     </tbody>
